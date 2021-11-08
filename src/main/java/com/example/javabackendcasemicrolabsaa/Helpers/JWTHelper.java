@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -67,15 +68,7 @@ public class JWTHelper {
         tokens.put("accessToken", accessToken);
         tokens.put("refreshToken", refreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
+        response.setStatus(OK.value());
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-    }
-
-    public static void setUnauthorized(HttpServletResponse response, String message) throws IOException {
-        response.setHeader("token not valid", message);
-        response.setStatus(UNAUTHORIZED.value());
-        Map<String, String> error = new HashMap<>();
-        error.put("error_message", message);
-        response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
 }
